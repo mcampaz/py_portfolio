@@ -19,29 +19,26 @@ def parsing_numbers(connections_data):
     telemarketers = {}
 
     for connection in connections_data:
-        time_list = connection[2:]
+        time_list = list(connection[2:])
         if connection[0][0] == '(':
             if connection[0] not in fixed_lines:
-                if len(connection) == 4:
-                    fixed_lines[connection[0]] = {connection[1]: time_list}
-                else:
-                    fixed_lines[connection[0]] = {connection[1]: time_list}
+                fixed_lines[connection[0]] = {connection[1]: [time_list]}
             elif connection[1] not in fixed_lines[connection[0]]:
-                fixed_lines[connection[0]][connection[1]] = time_list
+                fixed_lines[connection[0]][connection[1]] = [time_list]
             else:
                 fixed_lines[connection[0]][connection[1]].append(time_list)
         elif connection[0].startswith('140'):
             if connection[0] not in telemarketers:
-                telemarketers[connection[0]] = {connection[1]: time_list}
+                telemarketers[connection[0]] = {connection[1]: [time_list]}
             elif connection[1] not in telemarketers[connection[0]]:
-                telemarketers[connection[0]][connection[1]] = time_list
+                telemarketers[connection[0]][connection[1]] = [time_list]
             else:
                 telemarketers[connection[0]][connection[1]].append(time_list)
         else:
             if connection[0] not in mobiles:
-                mobiles[connection[0]] = {connection[1]: time_list}
+                mobiles[connection[0]] = {connection[1]: [time_list]}
             elif connection[1] not in mobiles[connection[0]]:
-                mobiles[connection[0]][connection[1]] = time_list
+                mobiles[connection[0]][connection[1]] = [time_list]
             else:
                 mobiles[connection[0]][connection[1]].append(time_list)
     return fixed_lines, telemarketers, mobiles
@@ -75,13 +72,13 @@ print()
 
 for incoming in fixed_line_calls:
     for answering in fixed_line_calls[incoming]:
-        time, duration = (fixed_line_calls[incoming][answering][-1]).split(" ")
+        time, duration = fixed_line_calls[incoming][answering][-1][0], fixed_line_calls[incoming][answering][-1][1]
         print("Last record of calls, {} calls {} at time {}, lasting {} seconds".format(incoming, answering, time,
                                                                                         duration))
 
 for incoming in telemarketer_calls:
     for answering in telemarketer_calls[incoming]:
-        time, duration = (telemarketer_calls[incoming][answering][-1]).split(" ")
+        time, duration = telemarketer_calls[incoming][answering][-1][0], telemarketer_calls[incoming][answering][-1][1]
         print("Last record of calls, {} calls {} at time {}, lasting {} seconds".format(incoming, answering, time,
                                                                                         duration))
 
@@ -89,6 +86,6 @@ for incoming in mobile_calls:
     for answering in mobile_calls[incoming]:
         print(mobile_calls[incoming][answering][-1])
         print(mobile_calls[incoming][answering])
-        time, duration = (mobile_calls[incoming][answering][-1]).split(" ")
+        time, duration = mobile_calls[incoming][answering][-1][0], mobile_calls[incoming][answering][-1][1]
         print("Last record of calls, {} calls {} at time {}, lasting {} seconds".format(incoming, answering, time,
                                                                                         duration))
