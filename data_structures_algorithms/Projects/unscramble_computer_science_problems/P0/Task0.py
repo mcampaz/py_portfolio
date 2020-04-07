@@ -17,7 +17,7 @@ def parsing_numbers(connections_data):
     fixed_lines = {}
     mobiles = {}
     telemarketers = {}
-    time_list = []
+
     for connection in connections_data:
         time_list = connection[2:]
         if connection[0][0] == '(':
